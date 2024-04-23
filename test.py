@@ -49,11 +49,15 @@ def request_with_pycurl(
 
 body, status_code = request_with_pycurl(f'{namuwikiUrl}/w/%EC%9B%90%20%EC%98%A4%ED%94%84')
 raw = BeautifulSoup(body, "html.parser")
-content = raw.find_all('script')
-text = str(content[1])
-text = text.replace('<script>window.INITIAL_STATE=', '')
-text = text.replace('</script>', '')
-text_json_1 = json.loads(text)
+contents = raw.find_all('script')
+target_json = ''
+for content in contents:
+    text = str(content)
+    if text.find('window.INITIAL_STATE=') != -1:
+        text = text.replace('<script>window.INITIAL_STATE=', '')
+        text = text.replace('</script>', '')
+        target_json = text
+text_json_1 = json.loads(target_json)
 
 keys_1 = list(text_json_1.keys())
 text_json_2 = text_json_1[keys_1[2]]
