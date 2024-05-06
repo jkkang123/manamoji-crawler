@@ -47,7 +47,7 @@ def request_with_pycurl(
 #             if mangaTag.get('href') and mangaTag.get('title') and mangaTag.string:
 #                 mangaHtml = get_html(mangaTag.get('href'))
 
-body, status_code = request_with_pycurl(f'{namuwikiUrl}/w/%EC%9B%90%20%EC%98%A4%ED%94%84')
+body, status_code = request_with_pycurl(f'{namuwikiUrl}/w/%EA%B0%9C%EA%B3%A8%EA%B0%9C%EA%B3%A8%20%EB%A7%88%EB%B2%95%EC%82%AC')
 raw = BeautifulSoup(body, "html.parser")
 contents = raw.find_all('script')
 target_json = ''
@@ -78,5 +78,6 @@ for i in range(1, len(text_json_4)):
 
 print(text_number)
 html_string = html.unescape(text_json_4[text_number])
+print(html_string)
 content = BeautifulSoup(html_string,'html.parser')
 print(content)

@@ -1,11 +1,12 @@
 import json
+import html
 import requests
 import pycurl
 import certifi
 from io import BytesIO
 from bs4 import BeautifulSoup
 
-from src.entities.crawl_manga_result import CrawlMangaResult
+from src.entities.crawl_manga_result import CrawlNewMangaResult
 from src.utils.config import get_namu_url
 
 
@@ -37,9 +38,9 @@ def request_with_pycurl(
     return buffer.getvalue(), status_code
 
 
-def crawl_manga(
-    mangaId: str
-) -> CrawlMangaResult:
+def crawl_new_manga(
+    url: str
+) -> CrawlNewMangaResult:
     #TODO Return 정의
 
     # allMangaListHtml = get_html(f'{namuwikiUrl}/w/%EC%9D%BC%EB%B3%B8%20%EB%A7%8C%ED%99%94/%EB%AA%A9%EB%A1%9D')
@@ -64,3 +65,29 @@ def crawl_manga(
             text = text.replace('</script>', '')
             target_json = text
     text_json_1 = json.loads(target_json)
+
+    keys_1 = list(text_json_1.keys())
+    text_json_2 = text_json_1[keys_1[2]]
+
+    keys_2 = list(text_json_2.keys())
+    text_json_3 = text_json_2[keys_2[2]]
+
+    keys_3 = list(text_json_3.keys())
+    text_json_4 = text_json_3[keys_3[6]]
+
+    summary_tag_num = 0
+    content_tag_num = 0
+    for i in range(1, len(text_json_4)):
+        html_string = html.unescape(text_json_4[i])
+        content = BeautifulSoup(html_string, 'html.parser')
+        summary_tag = content.find(id="개요")
+        if summary_tag:
+            summary_tag_num = i + 1
+        content_tag = content.find(id="줄거리")
+        if content_tag:
+            content_tag_num = i + 1
+
+    return CrawlNewMangaResult(
+
+    )
+
